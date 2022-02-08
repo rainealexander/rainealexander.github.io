@@ -1,1 +1,1 @@
-Repository for my personal blog at http://rainealexander.github.io
+Repository for my personal Blog/Engineering journal https://rainealexander.github.io/
