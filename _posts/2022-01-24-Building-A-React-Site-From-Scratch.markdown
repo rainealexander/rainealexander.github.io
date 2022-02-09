@@ -162,7 +162,7 @@ Our index.html is very simple, as we just need a "root" element to plug our reac
 Similarly, index.js doesn't require much to get something to display:
 
 
-{% highlight javascript %}
+{% highlight jsx %}
 import React from 'react';
 import { render } from 'react-dom';
 
