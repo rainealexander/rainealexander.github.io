@@ -13,36 +13,44 @@ This started as a list for personal use, as I can never remember the exact tools
 
 I'm going to assume you already have your basics set up - Node.js, npm, VS Code or your favorite editor/IDE.
 
-We need a way to serve our front end and Express.js makes this a relatively simple task. Adding Nodemon to the mix allows the server to automatically restart when files are changed, which makes development much smoother. Nodemon can be installed as a global package if you want to use it directly from the command line, but I prefer to install locally as a dev dependency. Rounding out the back end we have `dotenv` and `cors`.
+We need a way to serve our front end and Express.js makes this a relatively simple task. Adding Nodemon to the mix allows the server to automatically restart when files are changed, which makes development much smoother. Nodemon can be installed as a global package if you want to use it directly from the command line, but I prefer to install locally as a dev dependency. Rounding out the back end we have `dotenv` and `cors`. *Dotenv* allows us to create and easily access environment variables in our code, and *cors* is a middleware that helps us manage cross-origin resource sharing for our app.
+
 
 ```
 npm install express dotenv cors
 npm install --save-dev nodemon
 ```
 
+
 ## Installing React
 
 All we need here are the React and ReactDOM libraries:
+
 
 ```
 npm install react react-dev
 ```
 
+
 I guess that's the easy one to remember. Depending on your project needs you might also want React Router for website navigation, version 6 is the newest at the time of this writing:
+
 
 ```
 npm install react-router-dom@6
 ```
 
+
 ## Development Dependencies
 
 Now for the complicated stuff. Linting, transpiling, bundling, oh my. First the list we have Webpack to bundle all the front end code into one file. Babel along with it's presets *transpile* any code with ES6 (or above) syntax to ES5 so it can be used by older browsers. Finally our "loaders" to get our CSS and JavaScript into our bundle.
+
 
 ```
 npm install --save-dev webpack webpack-cli \
 @babel/core @babel/preset-react @babel/preset-env \
 babel-loader css-loader style-loader html-webpack-plugin
 ```
+
 
 I added `html-webpack-plugin` to generate our index HTML file so we don't have to worry about plugging in any scripts or links every time something changes.
 
@@ -63,7 +71,8 @@ root_folder/
 
 For our Babel config we just need to add any presets or plugins:
 
-```
+
+{% highlight javascript %}
 module.exports = {
   presets: [
     [
@@ -75,11 +84,13 @@ module.exports = {
       "@babel/preset-env"
   ]
 };
-```
+{% endhighlight %}
+
 
 The Webpack config is a bit more involved. The first piece is the "mode" property, which tells webpack if the project should be built for development or production. We also need to specify an entry point and output location for the bundle file. Module setup :
 
-```
+
+{% highlight javascript %}
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -120,7 +131,8 @@ module.exports = {
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({ template: './client/index.html' })]
 };
-```
+{% endhighlight %}
+
 
 The "module" property tells our loaders what type of files to looks for and where to find them so they can be put into the final bundle. I have added the Mini CSS Extract plugin so I can have a separate css file for each component if I want.
 
@@ -130,7 +142,8 @@ Whew, finally done with all the setup! Now to get something on the page!
 
 Our index.html is very simple, as we just need a "root" element to plug our react code into:
 
-```
+
+{% highlight html %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -142,12 +155,14 @@ Our index.html is very simple, as we just need a "root" element to plug our reac
   <div id="root"></div>
 </body>
 </html>
+{% endhighlight %}
 
-```
+
 
 Similarly, index.js doesn't require much to get something to display:
 
-```
+
+{% highlight javascript %}
 import React from 'react';
 import { render } from 'react-dom';
 
@@ -157,12 +172,14 @@ render(
   <h1>Exciting App Content</h1>,
   root
 );
+{% endhighlight %}
 
-```
+
 
 Finally, a quick server with express.js to load our content:
 
-```
+
+{% highlight javascript %}
 require('dotenv').config();
 const express = require('express');
 const app = express();
@@ -188,19 +205,22 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`App running at http://localhost:${port}`);
 });
+{% endhighlight %}
 
-```
+
 
 ## Running the App
 
-Now that all the configuration and code is complete, we just need a couple scripts to build the client-side code and run the server. In package.json:
+Now that all the configuration and code is complete, we just need a couple scripts to build the client-side code and run the server. In package.json add:
 
-```
+
+{% highlight json %}
 "scripts": {
     "server-dev": "nodemon app.js",
     "client-dev": "webpack build --watch"
-  },
-```
+}
+{% endhighlight %}
+
 
 All that's left is to open two terminals, in the first we run our client build process `npm run client-dev`, and the second we start our server `npm run server-dev`. Once the server is up, it should print out a link to your localhost port where the app is running:
 
@@ -214,3 +234,4 @@ And there's the app!
 ![server running]({{ BASE_URL }}/resources/app-content.png)
 
 
+Now that we have a framework for the next awesome website or app, it's time to get out there and make it a reality!
